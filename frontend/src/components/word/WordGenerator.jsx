@@ -3,27 +3,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../config";
 import WordSectionEditor from "./WordSectionEditor";
-import "../../styles/WordGenerator.css";
-
-/**
- * Simplified WordGenerator — sections-only mode
- *
- * - Removed pagesConfig and "sections per page" UI.
- * - UI is controlled only by numSections (single input box next to title).
- * - num_pages sent to backend is derived heuristically (ceil(numSections / 2))
- *   — backend still controls exact split; UI only sends hints.
- * - Keeps normalizeProject, auth header logic, refine & export flows.
- */
+import "./WordGenerator.css"; // ⬅️ styles
 
 function WordGenerator() {
   const [docTitle, setDocTitle] = useState("");
   const [docTopic, setDocTopic] = useState("");
+  const [numPages, setNumPages] = useState(2);
 
-  // Sections-only controls
-  const [numSections, setNumSections] = useState(2);
   const [sections, setSections] = useState([
     { id: 1, title: "", orderIndex: 1 },
-    { id: 2, title: "", orderIndex: 2 },
   ]);
 
   const [wordProjectId, setWordProjectId] = useState(null);
@@ -31,124 +19,47 @@ function WordGenerator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [mode, setMode] = useState("editing"); // editing | generating | generated
+  // 🔥 UI mode: editing | generating | generated
+  const [mode, setMode] = useState("editing");
 
-  // Robust auth header getter (checks common keys + authUser)
+  // 👇 same idea as Dashboard.jsx
   const getAuthHeaders = () => {
-    const possibleKeys = ["authToken", "auth_token", "accessToken", "access_token", "token"];
-    let token = null;
-    for (const k of possibleKeys) {
-      const v = localStorage.getItem(k);
-      if (v) {
-        token = v;
-        break;
-      }
-    }
-    if (!token) {
-      const storedUser = localStorage.getItem("authUser");
-      if (storedUser) {
-        try {
-          const parsed = JSON.parse(storedUser);
-          token = parsed?.access_token || parsed?.token || parsed?.authToken || parsed?.accessToken || token || null;
-        } catch (e) {
-          // ignore
-        }
-      }
-    }
+    const token = localStorage.getItem("authToken");
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
 
-  // Keep sections array in sync with numSections
-  useEffect(() => {
-    const desired = Math.max(1, Number(numSections) || 1);
-    setSections((prev) => {
-      const copy = [...prev];
-      while (copy.length < desired) {
-        const nextOrder = copy.length + 1;
-        copy.push({ id: nextOrder, title: "", orderIndex: nextOrder });
-      }
-      if (copy.length > desired) {
-        return copy.slice(0, desired);
-      }
-      return copy;
-    });
-  }, [numSections]);
-
   const addSection = () => {
-    setSections((prev) => {
-      const nextOrder = prev.length + 1;
-      setNumSections((n) => Math.max(1, n + 1));
-      return [...prev, { id: nextOrder, title: "", orderIndex: nextOrder }];
-    });
-  };
-
-  const removeSection = () => {
-    setSections((prev) => {
-      if (prev.length <= 1) return prev;
-      setNumSections((n) => Math.max(1, n - 1));
-      return prev.slice(0, -1);
-    });
+    const nextOrder = sections.length + 1;
+    setSections([
+      ...sections,
+      { id: nextOrder, title: "", orderIndex: nextOrder },
+    ]);
   };
 
   const updateSectionTitle = (id, value) => {
-    setSections((prev) => prev.map((s) => (s.id === id ? { ...s, title: value } : s)));
+    setSections((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, title: value } : s))
+    );
   };
-
-  // normalize backend shape so frontend remains stable
-  const normalizeProject = (project) => {
-    if (!project) return project;
-    const normalized = { ...project };
-    normalized.num_pages = project.num_pages ?? project.numPages ?? 1;
-    if (Array.isArray(project.sections)) {
-      normalized.sections = project.sections.map((s, idx) => {
-        const id = s.id ?? s.section_id ?? s._id ?? idx + 1;
-        const order_index = s.order_index ?? s.orderIndex ?? s.order ?? s.section_index ?? idx + 1;
-        const title = s.title ?? s.heading ?? s.name ?? `Section ${order_index}`;
-        const content = s.content ?? s.body ?? s.text ?? "";
-        const page_number = s.page_number ?? s.pageNumber ?? s.page ?? 1;
-        return { id, order_index, title, content, page_number, reaction: s.reaction ?? null, comment: s.comment ?? null };
-      });
-    } else {
-      normalized.sections = [];
-    }
-    return normalized;
-  };
-
-  // Heuristic for num_pages: backend still decides final split.
-  // Using ceil(numSections / 2) as a simple hint (you can change).
-  const deriveNumPages = (sectionsCount) => Math.max(1, Math.ceil((Number(sectionsCount) || 1) / 2));
 
   const handleGenerateWord = async () => {
     setError("");
+
     if (!docTitle.trim() || !docTopic.trim()) {
       setError("Please fill in both Document Title and Topic/Prompt.");
       return;
     }
 
-    const totalDesired = Math.max(1, Number(numSections) || 1);
-    const anyTitleProvided = sections.some((s) => s.title && s.title.trim());
-    let sectionsPayload = [];
-
-    if (anyTitleProvided) {
-      const working = [...sections];
-      while (working.length < totalDesired) {
-        const nextOrder = working.length + 1;
-        working.push({ id: nextOrder, title: "", orderIndex: nextOrder });
-      }
-      const truncated = working.slice(0, totalDesired);
-      sectionsPayload = truncated.map((s, idx) => ({
-        title: s.title.trim() || `Section ${idx + 1}`,
-        order_index: idx + 1,
-      }));
-    } else {
-      sectionsPayload = []; // let backend auto-propose headings
-    }
+    const sectionsPayload = sections.map((s, idx) => ({
+      title: s.title.trim() || `Section ${idx + 1}`,
+      order_index: idx + 1,
+    }));
 
     const payload = {
       title: docTitle.trim(),
       topic: docTopic.trim(),
       doc_type: "docx",
-      num_pages: deriveNumPages(totalDesired),
+      num_pages: Number(numPages),
       sections: sectionsPayload,
     };
 
@@ -157,21 +68,25 @@ function WordGenerator() {
       setLoading(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
 
+      // ⬇️ IMPORTANT: add / at end AND auth header
       const res = await axios.post(`${BASE_URL}/documents/`, payload, {
-        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+        },
       });
 
-      const normalized = normalizeProject(res.data);
-      setWordProjectId(normalized.id);
-      setWordDoc(normalized);
+      setWordProjectId(res.data.id);
+      setWordDoc(res.data);
       setMode("generated");
     } catch (err) {
-      console.error("Generate error:", err);
+      console.error(err);
+      // avoid [object Object]
       const backendMsg =
         err.response?.data?.detail ??
-        err.response?.data?.message ??
-        (typeof err.response?.data === "string" ? err.response.data : null) ??
-        err.message;
+        (typeof err.response?.data === "string"
+          ? err.response.data
+          : null);
       setError(backendMsg || "Error generating document.");
       setMode("editing");
     } finally {
@@ -179,60 +94,80 @@ function WordGenerator() {
     }
   };
 
-  // fetch document details (normalize)
+  // Fetch document details when wordProjectId changes
   useEffect(() => {
     if (!wordProjectId) return;
+
     const fetchDoc = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${BASE_URL}/documents/${wordProjectId}`, {
-          headers: { Accept: "application/json", ...getAuthHeaders() },
-        });
-        const normalized = normalizeProject(res.data);
-        setWordDoc(normalized);
+        const res = await axios.get(
+          `${BASE_URL}/documents/${wordProjectId}`,
+          {
+            headers: {
+              Accept: "application/json",
+              ...getAuthHeaders(),
+            },
+          }
+        );
+        setWordDoc(res.data);
         setMode("generated");
       } catch (err) {
-        console.error("Fetch doc error:", err);
+        console.error(err);
         setError("Error loading document details.");
         setMode("editing");
       } finally {
         setLoading(false);
       }
     };
+
     fetchDoc();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wordProjectId]);
 
   const handleRefineSection = async (sectionId, prompt) => {
     try {
       setLoading(true);
+
       await axios.post(
         `${BASE_URL}/documents/${wordProjectId}/sections/${sectionId}/refine`,
         { prompt: prompt || "Improve clarity and structure." },
-        { headers: { "Content-Type": "application/json", ...getAuthHeaders() } }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            ...getAuthHeaders(),
+          },
+        }
       );
 
-      const res = await axios.get(`${BASE_URL}/documents/${wordProjectId}`, {
-        headers: { Accept: "application/json", ...getAuthHeaders() },
-      });
-      const normalized = normalizeProject(res.data);
-      setWordDoc(normalized);
+      const res = await axios.get(
+        `${BASE_URL}/documents/${wordProjectId}`,
+        {
+          headers: {
+            Accept: "application/json",
+            ...getAuthHeaders(),
+          },
+        }
+      );
+      setWordDoc(res.data);
       alert("Refinement applied!");
     } catch (err) {
-      console.error("Refine error:", err);
-      alert("Error refining section. Check console for details.");
+      console.error(err);
+      alert("Error refining section.");
     } finally {
       setLoading(false);
     }
   };
 
-  const downloadUrl = wordProjectId ? `${BASE_URL}/documents/${wordProjectId}/export` : null;
+  const downloadUrl = wordProjectId
+    ? `${BASE_URL}/documents/${wordProjectId}/export`
+    : null;
 
+  // 🔁 Start over: reset everything
   const handleReset = () => {
     setDocTitle("");
     setDocTopic("");
-    setNumSections(2);
-    setSections([{ id: 1, title: "", orderIndex: 1 }, { id: 2, title: "", orderIndex: 2 }]);
+    setNumPages(2);
+    setSections([{ id: 1, title: "", orderIndex: 1 }]);
     setWordProjectId(null);
     setWordDoc(null);
     setError("");
@@ -242,66 +177,59 @@ function WordGenerator() {
 
   return (
     <section className="page page-narrow word-page">
+      {/* header inside page (always visible) */}
       <header className="word-page-header">
         <div>
           <h2>📄 AI Word Document Generator</h2>
-          <p className="page-subtitle">Configure sections (only), let the AI draft content, refine with prompts, then export to .docx.</p>
+          <p className="page-subtitle">
+            Configure pages & sections, let the AI draft content, refine with
+            prompts, then export to .docx.
+          </p>
         </div>
-        <div className="word-badge">DOCX STUDIO</div>
+        <div className="word-badge">DOCX Studio</div>
       </header>
 
+      {/* CARD 1: CONFIG → only in editing mode */}
       {mode === "editing" && (
         <div className="card">
           <h3>1️⃣ Configure Document</h3>
-          <p className="card-caption">Set up the title, topic and section headings. The AI expands them into full pages.</p>
+          <p className="card-caption">
+            Set up the title, topic and high-level sections. The AI will expand
+            them into full pages.
+          </p>
 
-          <div className="field-grid" style={{ alignItems: "end" }}>
-            <label style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <div className="field-grid">
+            <label>
               Document Title
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <input
-                  type="text"
-                  value={docTitle}
-                  onChange={(e) => setDocTitle(e.target.value)}
-                  placeholder="e.g. Business Strategy Report 2025"
-                  style={{ flex: 1 }}
-                />
+              <input
+                type="text"
+                value={docTitle}
+                onChange={(e) => setDocTitle(e.target.value)}
+                placeholder="e.g. Business Strategy Report 2025"
+              />
+            </label>
 
-                {/* === SINGLE CLEAN NUMBER BOX FOR NUMBER OF SECTIONS ===
-                    No +/- buttons here — user types the number directly.
-                */}
-                <input
-                  type="number"
-                  min={1}
-                  max={200}
-                  value={numSections}
-                  onChange={(e) => {
-                    const v = Math.max(1, Number(e.target.value) || 1);
-                    setNumSections(v);
-                  }}
-                  aria-label="Number of Sections"
-                  style={{
-                    width: 84,
-                    height: 36,
-                    padding: "6px 8px",
-                    borderRadius: 8,
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    background: "transparent",
-                    color: "#fff",
-                    textAlign: "center",
-                  }}
-                />
-              </div>
-              <div style={{ fontSize: 12, color: "#9aa" }}>Number of Sections (controls sections list)</div>
+            <label>
+              Number of Pages
+              <input
+                type="number"
+                min={1}
+                max={20}
+                value={numPages}
+                onChange={(e) => setNumPages(e.target.value)}
+              />
             </label>
           </div>
 
+          {/* MAGIC PROMPT BOX */}
           <label className="prompt-label">
             Document Topic / Prompt
             <div className="prompt-box">
               <div className="prompt-header">
                 <span className="prompt-pill">✨ Magic Prompt</span>
-                <span className="prompt-hint">Describe what the document should cover. AI will expand it.</span>
+                <span className="prompt-hint">
+                  Describe what the document should cover. AI will expand it.
+                </span>
               </div>
 
               <textarea
@@ -313,61 +241,53 @@ function WordGenerator() {
               />
 
               <div className="prompt-footer">
-                <span className="prompt-counter">{docTopic.length} characters</span>
-                <div style={{ display: "flex", gap: 8 }}>
-                  <button
-                    type="button"
-                    className="prompt-idea-btn"
-                    onClick={() =>
-                      setDocTopic(
-                        "Write a concise overview of our startup's AI-powered presentation tool, including target audience, key features, benefits for students and businesses, and future roadmap."
-                      )
-                    }
-                    disabled={loading || mode === "generating"}
-                  >
-                    ⚡ Suggest sample prompt
-                  </button>
-
-                  <button type="button" className="ghost-pill" onClick={() => setDocTopic("")}>Clear prompt</button>
-                </div>
+                <span className="prompt-counter">
+                  {docTopic.length} characters
+                </span>
+                <button
+                  type="button"
+                  className="prompt-idea-btn"
+                  onClick={() =>
+                    setDocTopic(
+                      "Write a concise overview of our startup's AI-powered presentation tool, including target audience, key features, benefits for students and businesses, and future roadmap."
+                    )
+                  }
+                  disabled={loading || mode === "generating"}
+                >
+                  ⚡ Suggest sample prompt
+                </button>
               </div>
             </div>
           </label>
 
-          {!docTopic.trim() ? (
-            <p className="hint" style={{ marginTop: 12 }}>
-              Enter a short topic or prompt above — once you add a prompt you'll be able to generate sections below.
-            </p>
-          ) : (
-            <>
-              <p className="hint" style={{ marginTop: 12 }}>
-                Sections are linear. Use the number box beside the title or Add / Remove buttons below to change how many sections the AI should produce.
-              </p>
+          <p className="hint">
+            Sections are linear. The backend still controls the exact page
+            split.
+          </p>
 
-              <div className="sections-config">
-                <h4>Sections (titles optional)</h4>
-                {sections.map((sec) => (
-                  <div key={sec.id} className="section-row">
-                    <span>#{sec.orderIndex}</span>
-                    <input
-                      type="text"
-                      placeholder={`Section ${sec.orderIndex} title (optional)`}
-                      value={sec.title}
-                      onChange={(e) => updateSectionTitle(sec.id, e.target.value)}
-                    />
-                  </div>
-                ))}
-
-                <div style={{ marginTop: 8 }}>
-                  <button type="button" className="ghost-pill" onClick={addSection}>➕ Add Section</button>
-                  <button type="button" className="ghost-pill" style={{ marginLeft: 8 }} onClick={removeSection}>➖ Remove Section</button>
-                  <button type="button" className="ghost-pill" style={{ marginLeft: 8 }} onClick={() => setSections((prev) => prev.map((s, i) => ({ ...s, id: i + 1, orderIndex: i + 1 })) )}>🔁 Reindex IDs</button>
-                </div>
+          <div className="sections-config">
+            <h4>Sections</h4>
+            {sections.map((sec) => (
+              <div key={sec.id} className="section-row">
+                <span>#{sec.orderIndex}</span>
+                <input
+                  type="text"
+                  placeholder={`Section ${sec.orderIndex} title (optional)`}
+                  value={sec.title}
+                  onChange={(e) => updateSectionTitle(sec.id, e.target.value)}
+                />
               </div>
-            </>
-          )}
+            ))}
+            <button type="button" className="ghost-pill" onClick={addSection}>
+              ➕ Add Section
+            </button>
+          </div>
 
-          <button className="primary-action" onClick={handleGenerateWord} disabled={loading || mode === "generating"}>
+          <button
+            className="primary-action"
+            onClick={handleGenerateWord}
+            disabled={loading || mode === "generating"}
+          >
             {mode === "generating" ? "Generating..." : "Generate Word Document"}
           </button>
 
@@ -375,32 +295,31 @@ function WordGenerator() {
         </div>
       )}
 
+      {/* While generating: clean progress card */}
       {mode === "generating" && (
         <div className="card">
           <h3>2️⃣ Creating your document…</h3>
-          <p className="card-caption">Give it a moment while we turn your topic and sections into a full draft.</p>
+          <p className="card-caption">
+            Give it a moment while we turn your topic and sections into a full
+            draft.
+          </p>
         </div>
       )}
 
+      {/* CARD 2 + 3 → only in generated mode */}
       {wordDoc && mode === "generated" && (
         <>
           <div className="card">
             <h3>2️⃣ Review & Refine Sections</h3>
             <p className="meta-line">
-              <strong>Project ID:</strong> {wordDoc.id} • <strong>Pages (hint):</strong> {wordDoc.num_pages ?? 1}
+              <strong>Project ID:</strong> {wordDoc.id} •{" "}
+              <strong>Pages:</strong> {wordDoc.num_pages}
             </p>
 
             {wordDoc.sections?.map((section) => (
               <WordSectionEditor
                 key={section.id}
-                section={{
-                  id: section.id,
-                  order_index: section.order_index,
-                  title: section.title,
-                  content: section.content,
-                  reaction: section.reaction,
-                  comment: section.comment,
-                }}
+                section={section}
                 onRefine={handleRefineSection}
               />
             ))}
@@ -410,13 +329,174 @@ function WordGenerator() {
             <h3>3️⃣ Export Word Document</h3>
             {downloadUrl ? (
               <>
-                <button className="export-button" onClick={() => window.open(downloadUrl, "_blank")}>⬇️ Export DOCX</button>
-                <button className="secondary-action" style={{ marginLeft: "8px" }} onClick={handleReset}>🔄 Start over</button>
+                <button
+                  className="export-button"
+                  onClick={() => window.open(downloadUrl, "_blank")}
+                >
+                  ⬇️ Export DOCX
+                </button>
+                <button
+                  className="secondary-action"
+                  style={{ marginLeft: "8px" }}
+                  onClick={handleReset}
+                >
+                  🔄 Start over
+                </button>
               </>
             ) : (
               <p>Generate the document first to get a download link.</p>
             )}
           </div>
+        </>
+      )}
+
+      {/* Marketing / features / usecases / FAQ → only in editing mode */}
+      {mode === "editing" && (
+        <>
+          <section className="word-marketing">
+            {/* Feature 1: From prompt to draft */}
+            <div className="word-feature-row">
+              <div className="word-feature-media">
+                <div className="word-feature-media-card">
+                  <span className="word-feature-icon">📑</span>
+                  <p>Drop in your main “document drafting” illustration here.</p>
+                </div>
+              </div>
+              <div className="word-feature-copy">
+                <h3>From Prompt to Polished Draft</h3>
+                <p>
+                  Start with a title, topic and page count. DOCX Studio expands
+                  your idea into a full draft with intro, body and conclusion,
+                  so you aren&apos;t staring at a blank page.
+                </p>
+                <ul className="word-feature-list">
+                  <li>Great for reports, assignments, and internal docs.</li>
+                  <li>Keeps tone and structure consistent across pages.</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Feature 2: Section-wise control */}
+            <div className="word-feature-row word-feature-row--reverse">
+              <div className="word-feature-media">
+                <div className="word-feature-media-card word-feature-media-card--soft">
+                  <span className="word-feature-icon">🧩</span>
+                  <p>Use this card for a “sections / blocks” style visual.</p>
+                </div>
+              </div>
+              <div className="word-feature-copy">
+                <h3>Section-Wise Control & Refinement</h3>
+                <p>
+                  Each heading becomes its own section. Read, edit, or send
+                  refine prompts like “more formal”, “shorter summary” or
+                  “explain for beginners” without touching the rest of the
+                  document.
+                </p>
+                <ul className="word-feature-list">
+                  <li>Regenerate or improve one section at a time.</li>
+                  <li>Export the final version as a clean .docx file.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section className="word-usecases">
+            <h3>Where DOCX Studio shines</h3>
+            <div className="word-usecases-grid">
+              <div className="usecase-item">
+                <span className="usecase-icon">🎓</span>
+                <h4>Students</h4>
+                <p>
+                  Create drafts for lab reports, essays, and project summaries
+                  in a few clicks.
+                </p>
+              </div>
+              <div className="usecase-item">
+                <span className="usecase-icon">👔</span>
+                <h4>Hiring & HR</h4>
+                <p>
+                  Generate job descriptions, role summaries, and candidate
+                  feedback notes.
+                </p>
+              </div>
+              <div className="usecase-item">
+                <span className="usecase-icon">⚖️</span>
+                <h4>Legal & Policy Teams</h4>
+                <p>
+                  Turn bullet-point inputs into structured drafts you can review
+                  and edit.
+                </p>
+              </div>
+              <div className="usecase-item">
+                <span className="usecase-icon">📊</span>
+                <h4>Business & Sales</h4>
+                <p>
+                  Draft proposals, strategy docs, and internal briefs faster
+                  than ever.
+                </p>
+              </div>
+              <div className="usecase-item">
+                <span className="usecase-icon">🌍</span>
+                <h4>Researchers & Travelers</h4>
+                <p>
+                  Summarise notes, interviews, or travel logs into clean,
+                  shareable docs.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="word-faq">
+            <h3>FAQs</h3>
+            <div className="word-faq-grid">
+              <div className="faq-item">
+                <h4>What can I generate with the Word Document Generator?</h4>
+                <p>
+                  Anything that fits into a structured document: reports, study
+                  notes, proposals, guides, and more. You control the title,
+                  sections, and length.
+                </p>
+              </div>
+              <div className="faq-item">
+                <h4>Can I edit the content after it&apos;s generated?</h4>
+                <p>
+                  Yes. Review each section, make manual edits, or send refine
+                  prompts to improve clarity, tone, or level of detail.
+                </p>
+              </div>
+              <div className="faq-item">
+                <h4>Does it support multiple languages?</h4>
+                <p>
+                  The generator is powered by modern language models, so it can
+                  draft in many major languages as long as your prompt is clear.
+                </p>
+              </div>
+              <div className="faq-item">
+                <h4>Is there a limit on pages or sections?</h4>
+                <p>
+                  You choose the page count and can add multiple sections. For
+                  very long documents, it&apos;s usually best to split work into
+                  several projects.
+                </p>
+              </div>
+              <div className="faq-item">
+                <h4>Can I export to .docx?</h4>
+                <p>
+                  Yes, once you&apos;re happy with the content, export a Word
+                  (.docx) file that you can open and format further in your
+                  editor.
+                </p>
+              </div>
+              <div className="faq-item">
+                <h4>Will more features be added later?</h4>
+                <p>
+                  The DOCX Studio is built to grow. Future updates can include
+                  richer formatting controls and more analysis tools for long
+                  documents.
+                </p>
+              </div>
+            </div>
+          </section>
         </>
       )}
     </section>
