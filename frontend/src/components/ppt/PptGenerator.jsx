@@ -1,3 +1,4 @@
+// frontend/src/components/ppt/PptGenerator.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL, PPT_THEMES } from "../../config";
@@ -290,9 +291,7 @@ function PptGenerator() {
         <div className="ppt-hero-visual">
           <div className="ppt-hero-visual-card">
             <div className="ppt-hero-visual-icon">📽️</div>
-            <p className="ppt-hero-visual-text">
-              Create PPT in Minutes
-            </p>
+            <p className="ppt-hero-visual-text">Create PPT in Minutes</p>
           </div>
         </div>
       </section>
@@ -303,9 +302,7 @@ function PptGenerator() {
             <div className="ppt-fast-media">
               <div className="ppt-fast-card">
                 <div className="ppt-fast-icon">🖥️</div>
-                <p className="ppt-fast-card-text">
-                  No More Making Boring PPT
-                </p>
+                <p className="ppt-fast-card-text">No More Making Boring PPT</p>
               </div>
             </div>
 
@@ -397,9 +394,8 @@ function PptGenerator() {
           <div className="card ppt-step-card">
             <h3>2️⃣ Review & Edit Slides</h3>
             <p className="meta-line">
-              <strong>Presentation ID:</strong>{" "}
-              {presentation.presentation_id} • <strong>Topic:</strong>{" "}
-              {presentation.topic}
+              <strong>Presentation ID:</strong> {presentation.presentation_id} •{" "}
+              <strong>Topic:</strong> {presentation.topic}
             </p>
 
             {loading && <p>Loading slides...</p>}
@@ -429,9 +425,7 @@ function PptGenerator() {
               fonts and layout tweaks.
             </p>
 
-            <div
-              style={{ color: "#cbd5e1", fontSize: 12, marginBottom: 4 }}
-            >
+            <div style={{ color: "#cbd5e1", fontSize: 12, marginBottom: 4 }}>
               Loaded themes: {Object.keys(PPT_THEMES).length}
             </div>
 
@@ -443,9 +437,7 @@ function PptGenerator() {
                     <button
                       key={name}
                       type="button"
-                      className={`theme-thumb ${
-                        themeName === name ? "selected" : ""
-                      }`}
+                      className={`theme-thumb ${themeName === name ? "selected" : ""}`}
                       onClick={() => setThemeName(name)}
                       aria-pressed={themeName === name}
                       title={name}
@@ -462,30 +454,36 @@ function PptGenerator() {
                 })}
               </div>
 
-              <div style={{ marginTop: 12 }}>
-                <div
-                  style={{
-                    fontSize: 13,
-                    color: "#cbd5e1",
-                    marginBottom: 6,
-                  }}
-                >
-                  Selected theme preview
-                </div>
-                <div className="theme-preview-large">
-                  <img
-                    src={
-                      (PPT_THEMES[themeName] &&
-                        (PPT_THEMES[themeName].preview ||
-                          PPT_THEMES[themeName].thumb)) ||
-                      SAMPLE_IMAGE_PATH
-                    }
-                    alt="Selected theme preview"
-                    onError={onThumbError}
-                  />
-                </div>
-              </div>
+              {/* RIGHT-SIDE PREVIEW REMOVED — preview moved below grid */}
             </div>
+
+            {/* ===== Selected preview BELOW grid (centered, full-width container) ===== */}
+            <div className="selected-theme-preview-bottom" style={{ marginTop: 16 }}>
+              <h4 style={{ margin: 0, color: "#e5e7eb", fontSize: 13 }}>
+                Selected Theme (Preview Below Grid)
+              </h4>
+
+              <div
+                className="selected-theme-preview-image"
+                style={{
+                  marginTop: 10,
+                  width: "min(720px, 100%)",
+                  height: "auto",
+                  aspectRatio: "16/10",
+                  borderRadius: 12,
+                  backgroundImage: `url(${
+                    (PPT_THEMES[themeName] &&
+                      (PPT_THEMES[themeName].preview || PPT_THEMES[themeName].thumb)) ||
+                    SAMPLE_IMAGE_PATH
+                  })`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.45)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+              />
+            </div>
+            {/* ==================================================================== */}
 
             <button
               className="secondary-action"
@@ -496,6 +494,7 @@ function PptGenerator() {
                   ? "Apply selected theme"
                   : "Generate presentation first"
               }
+              style={{ marginTop: 14 }}
             >
               {loading ? "Applying..." : "Apply Design Theme"}
             </button>
