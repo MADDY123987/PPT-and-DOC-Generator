@@ -210,7 +210,7 @@ function WordGenerator() {
             </label>
 
             <label>
-              Number of Pages
+              Number of Section
               <input
                 type="number"
                 min={1}
@@ -492,7 +492,7 @@ function WordGenerator() {
                 <p>
                   The DOCX Studio is built to grow. Future updates can include
                   richer formatting controls and more analysis tools for long
-                  documents.
+                  documents and the improviosion will never end.
                 </p>
               </div>
             </div>
