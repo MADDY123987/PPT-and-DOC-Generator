@@ -289,3 +289,43 @@
   -webkit-touch-callout: default;
   -webkit-tap-highlight-color: rgba(255,255,255,0.04);
 }
+/* paste at end of ppt.css (or slide-editor.css) */
+
+/* Constrain the selected-theme preview so it never becomes huge */
+.selected-theme-preview-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* the preview image box */
+.selected-theme-preview-image {
+  width: 420px !important;        /* primary max width */
+  max-width: 92% !important;      /* responsive cap on small screens */
+  height: auto !important;        /* keep natural height */
+  aspect-ratio: 16 / 9 !important;/* maintains slide-like shape */
+  border-radius: 12px !important;
+  background-size: cover !important;
+  background-position: center !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  overflow: hidden !important;
+  display: block;
+}
+
+/* if the preview is using an <img> instead of background-image */
+.selected-theme-preview-image img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+/* Make the header text smaller so the preview feels balanced */
+.selected-theme-preview-bottom h4 {
+  font-size: 13px;
+  color: #e5e7eb;
+  margin: 0;
+}

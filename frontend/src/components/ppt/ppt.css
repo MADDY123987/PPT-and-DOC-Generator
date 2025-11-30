@@ -1035,3 +1035,32 @@
   color: #e5e7eb;
   margin: 0;
 }
+/* ===========================
+   FIX: Selected theme preview
+   Align left + same size as grid items
+   =========================== */
+
+.selected-theme-preview-bottom {
+  margin-top: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;   /* LEFT ALIGN */
+  width: 250px !important;              /* SAME WIDTH AS CARDS */
+}
+
+.selected-theme-preview-bottom h4 {
+  font-size: 13px !important;
+  margin-bottom: 6px !important;
+  color: #cbd5e1 !important;
+}
+
+/* image container (same as a theme-thumb img) */
+.selected-theme-preview-image {
+  width: 250px !important;              /* MATCH GRID CARD WIDTH */
+  height: 140px !important;             /* MATCH GRID THUMB HEIGHT */
+  border-radius: 10px !important;
+  background-size: cover !important;
+  background-position: center !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35) !important;
+}
