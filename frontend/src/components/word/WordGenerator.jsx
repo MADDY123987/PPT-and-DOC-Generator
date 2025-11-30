@@ -183,7 +183,7 @@ function WordGenerator() {
           <h2>📄 AI Word Document Generator</h2>
           <p className="page-subtitle">
             Configure pages & sections, let the AI draft content, refine with
-            prompts, then export to .docx.
+            prompts And Contents
           </p>
         </div>
         <div className="word-badge">DOCX Studio</div>
@@ -359,7 +359,7 @@ function WordGenerator() {
               <div className="word-feature-media">
                 <div className="word-feature-media-card">
                   <span className="word-feature-icon">📑</span>
-                  <p>Drop in your main “document drafting” illustration here.</p>
+                  <p>Create Documents In Minutes By  giving SubTopics For Your Prompt</p>
                 </div>
               </div>
               <div className="word-feature-copy">
@@ -381,7 +381,7 @@ function WordGenerator() {
               <div className="word-feature-media">
                 <div className="word-feature-media-card word-feature-media-card--soft">
                   <span className="word-feature-icon">🧩</span>
-                  <p>Use this card for a “sections / blocks” style visual.</p>
+                  <p>Refine Sections and Add Contents.</p>
                 </div>
               </div>
               <div className="word-feature-copy">
