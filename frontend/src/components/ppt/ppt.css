@@ -995,3 +995,70 @@
     grid-auto-rows: auto;
   }
 }
+
+/* Selected theme preview container placed BELOW the 3x3 theme grid */
+.selected-theme-preview-bottom {
+  margin-top: 22px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Title above preview */
+.selected-theme-preview-bottom h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #e5e7eb;
+}
+
+/* Preview box EXACT style as right-side preview */
+.selected-theme-preview-image {
+  width: 260px;
+  height: 150px;
+  border-radius: 14px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.25s ease;
+}
+
+.selected-theme-preview-image:hover {
+  transform: scale(1.05);
+}
+
+/* === Compact Selected Theme Preview (Below Grid) === */
+
+.selected-theme-preview-bottom {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  width: fit-content;          /* shrink box to content */
+  text-align: left;            /* keep it left aligned */
+}
+
+.selected-theme-preview-bottom h4 {
+  color: #e5e7eb;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+/* Image size similar to one theme tile */
+.selected-theme-preview-image {
+  width: 220px !important;     /* reduced width */
+  height: 130px !important;    /* reduced height */
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+}

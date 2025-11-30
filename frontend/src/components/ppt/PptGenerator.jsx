@@ -462,6 +462,7 @@ function PptGenerator() {
                 })}
               </div>
 
+              {/* ---- RIGHT-SIDE PREVIEW (kept as-is) ---- */}
               <div style={{ marginTop: 12 }}>
                 <div
                   style={{
@@ -487,6 +488,32 @@ function PptGenerator() {
               </div>
             </div>
 
+            {/* ==== NEW: Selected preview BELOW grid (centered, full-width container) ==== */}
+            <div className="selected-theme-preview-bottom" style={{ marginTop: 16 }}>
+              <h4 style={{ margin: 0, color: "#e5e7eb" }}>Selected Theme (Preview Below Grid)</h4>
+              <div
+                className="selected-theme-preview-image"
+                style={{
+                  marginTop: 10,
+                  width: 420,
+                  height: 240,
+                  borderRadius: 12,
+                  backgroundImage: `url(${
+                    (PPT_THEMES[themeName] &&
+                      (PPT_THEMES[themeName].preview ||
+                        PPT_THEMES[themeName].thumb)) ||
+                    SAMPLE_IMAGE_PATH
+                  })`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.45)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+              />
+            </div>
+            {/* ================= END NEW BLOCK ================= */}
+
+
             <button
               className="secondary-action"
               onClick={handleApplyTheme}
@@ -496,6 +523,7 @@ function PptGenerator() {
                   ? "Apply selected theme"
                   : "Generate presentation first"
               }
+              style={{ marginTop: 14 }}
             >
               {loading ? "Applying..." : "Apply Design Theme"}
             </button>
