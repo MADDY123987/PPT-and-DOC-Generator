@@ -1,0 +1,997 @@
+/* Sample image for local testing (uploaded asset):
+   /mnt/data/cf6a33ff-d0bc-4e56-89d7-6a9513516d8a.png
+*/
+
+/* =========================================================
+   COLOR PALETTE (for reference)
+   ---------------------------------------------------------
+   Background deep:      #020617  / #050816
+   Card surface dark:    #020617
+   Soft surface mid:     #0b1220
+   Accent violet:        #6366f1
+   Accent blue:          #3b82f6
+   Accent teal:          #22c55e
+   Text main:            #e5e7eb
+   Text muted:           #9ca3af
+   ======================================================= */
+
+/* ========== PAGE LAYOUT ========== */
+
+/* Expand full usable width */
+.ppt-page {
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+
+/* ========== HERO SECTION (TOP) ========== */
+
+.ppt-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(260px, 2fr);
+  gap: 26px;
+  padding: 26px 24px;
+  border-radius: 22px;
+  background: radial-gradient(circle at top left, #111827, #020617 60%);
+  border: 1px solid #1f2937;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.85);
+}
+
+.ppt-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #e5e7eb;
+}
+
+.ppt-hero-chip {
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(129, 140, 248, 0.18);
+  color: #c7d2fe;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ppt-hero-title {
+  font-size: 1.9rem;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.ppt-hero-subtitle {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #d1d5db;
+}
+
+.ppt-hero-description {
+  margin: 4px 0 0;
+  font-size: 0.93rem;
+  color: #9ca3af;
+}
+
+/* hero prompt panel (glass card) */
+
+.ppt-hero-prompt {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(31, 41, 55, 0.9);
+  background: radial-gradient(circle at top left, #020617, #020617 60%);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle moving glow */
+.ppt-hero-prompt::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 40deg,
+    rgba(99, 102, 241, 0.35),
+    rgba(59, 130, 246, 0.22),
+    rgba(45, 212, 191, 0.2),
+    transparent,
+    transparent
+  );
+  opacity: 0.2;
+  mix-blend-mode: screen;
+  animation: pptPromptGlow 14s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes pptPromptGlow {
+  0% {
+    transform: translate3d(-10%, -8%, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(12%, 8%, 0) rotate(180deg);
+  }
+  100% {
+    transform: translate3d(-10%, -8%, 0) rotate(360deg);
+  }
+}
+
+.ppt-hero-label {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- PROMPT TEXTAREA (UX FIXES applied here) ---------- */
+/* Key changes:
+   - remove native resize handle
+   - visually hide scrollbars while keeping scroll behavior
+   - add extra right padding so content doesn't feel cramped
+*/
+
+.ppt-hero-textarea {
+  position: relative;
+  z-index: 1;
+  margin-top: 8px;
+  width: 100%;
+  /* keep vertical scrolling but hide native resize UI */
+  resize: none; /* disables native resize handle (corner) */
+  min-height: 140px;
+  max-height: 340px;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: #020617;
+  padding: 12px 14px; /* give enough padding */
+  padding-right: 18px; /* extra right padding to avoid visual clipping */
+  font-size: 0.9rem;
+  color: #e5e7eb;
+  overflow: auto; /* allow scrolling */
+  line-height: 1.45;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.01);
+}
+
+/* placeholder + focus */
+.ppt-hero-textarea::placeholder {
+  color: #6b7280;
+}
+
+.ppt-hero-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.55);
+}
+
+/* Hide scrollbars visually but keep scroll functionality */
+.ppt-hero-textarea::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+
+/* make the track invisible */
+.ppt-hero-textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* hide the thumb completely (so user won't see it), but keep ability to scroll */
+.ppt-hero-textarea::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+/* Firefox */
+.ppt-hero-textarea {
+  scrollbar-width: none; /* hide scrollbar on FF */
+  -ms-overflow-style: none; /* hide scrollbar on IE 10+ */
+}
+
+/* Fallback: in case some browsers still show a thin track, reduce contrast */
+.ppt-hero-textarea::-webkit-scrollbar-thumb:window-inactive {
+  background: transparent;
+}
+
+/* small helpful hint: keep accessible focus outline for keyboard users */
+.ppt-hero-textarea:focus {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.18), 0 0 0 1px rgba(99, 102, 241, 0.55);
+}
+
+/* ppt hero footer + counters remain same */
+.ppt-hero-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.ppt-hero-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #9ca3af;
+}
+
+.ppt-hero-small-label {
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ppt-hero-small-label input[type="number"] {
+  width: 90px;
+  border-radius: 999px;
+  border: 1px solid #1f2937;
+  background: #020617;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  color: #e5e7eb;
+}
+
+.ppt-hero-small-label input[type="number"]:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5);
+}
+
+.ppt-hero-counter {
+  color: #6b7280;
+}
+
+.ppt-hero-footer-right {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* buttons */
+
+.ppt-hero-idea-btn {
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  padding: 6px 12px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.ppt-hero-idea-btn:hover {
+  background: #111827;
+}
+
+.ppt-hero-generate-btn {
+  border-radius: 999px;
+  border: none;
+  padding: 7px 18px;
+  background: linear-gradient(135deg, #6366f1, #3b82f6);
+  color: #eef2ff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 16px 30px rgba(37, 99, 235, 0.4);
+}
+
+.ppt-hero-generate-btn:disabled {
+  opacity: 0.65;
+  cursor: default;
+  box-shadow: none;
+}
+
+.ppt-hero-error {
+  margin-top: 4px;
+}
+
+/* hero right visual */
+
+.ppt-hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ppt-hero-visual-card {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 4 / 3;
+  border-radius: 24px;
+  background: radial-gradient(circle at top left, #6366f1, #3b82f6, #f97316);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  text-align: center;
+  color: #020617;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.8);
+}
+
+.ppt-hero-visual-icon {
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+}
+
+.ppt-hero-visual-text {
+  font-size: 0.9rem;
+  max-width: 260px;
+}
+
+/* =========================================================
+   INFO + HOW IT WORKS (UNDER HERO)
+   ======================================================= */
+
+.ppt-info {
+  margin-top: 4px;
+  padding: 20px 22px 24px;
+  border-radius: 20px;
+  border: 1px solid #111827;
+  background: radial-gradient(circle at top left, #020617, #020617 65%);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.95);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  color: #e5e7eb;
+}
+
+/* top row: visual + copy */
+
+.ppt-fast-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 2.2fr);
+  gap: 20px;
+  align-items: center;
+}
+
+.ppt-fast-media {
+  display: flex;
+  justify-content: center;
+}
+
+.ppt-fast-card {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 4 / 3;
+  border-radius: 22px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: radial-gradient(circle at top left, #4f46e5, #3b82f6, #f97316);
+  color: #f9fafb;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.8);
+  font-size: 0.9rem;
+}
+
+.ppt-fast-icon {
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+}
+
+.ppt-fast-card-text {
+  max-width: 260px;
+}
+
+.ppt-fast-copy h2 {
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+  color: #e5e7eb;
+}
+
+.ppt-fast-copy p {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+  color: #9ca3af;
+}
+
+.ppt-fast-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.86rem;
+  color: #9ca3af;
+}
+
+.ppt-fast-list li + li {
+  margin-top: 4px;
+}
+
+/* steps section */
+
+.ppt-steps {
+  margin-top: 4px;
+}
+
+.ppt-steps h3 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  color: #e5e7eb;
+}
+
+.ppt-steps-subtitle {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.ppt-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ppt-step-card {
+  position: relative;
+  padding: 12px 12px 14px;
+  border-radius: 14px;
+  background: #020617;
+  border: 1px solid #111827;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.9);
+  font-size: 0.86rem;
+}
+
+.ppt-step-number {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #6366f1, #3b82f6);
+  color: #eef2ff;
+  margin-bottom: 6px;
+}
+
+.ppt-step-card h4 {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+  color: #e5e7eb;
+}
+
+.ppt-step-card p {
+  margin: 0;
+  color: #9ca3af;
+}
+
+/* ========== STEP CARDS (EDIT / THEME / EXPORT) ========== */
+
+.ppt-page .card.ppt-step-card {
+  position: relative;
+  background: #020617;
+  border-radius: 18px;
+  border: 1px solid #111827;
+  padding: 18px 20px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
+  overflow: hidden;
+}
+
+.ppt-page .card.ppt-step-card::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  background: radial-gradient(
+    circle at top left,
+    rgba(99, 102, 241, 0.3),
+    rgba(59, 130, 246, 0.16),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ppt-page .card.ppt-step-card:hover::before {
+  opacity: 1;
+}
+
+.ppt-page .card.ppt-step-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ppt-page .card.ppt-step-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  color: #e5e7eb;
+}
+
+.ppt-page .card-caption {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.ppt-page .meta-line {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin: 4px 0 12px;
+}
+
+/* fields inside dark cards */
+
+.ppt-page .field-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.ppt-page .field-grid label {
+  flex: 1 1 180px;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+}
+
+.ppt-page input[type="text"],
+.ppt-page input[type="number"],
+.ppt-page select {
+  margin-top: 4px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #1f2937;
+  background: #020617;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+}
+
+.ppt-page input:focus,
+.ppt-page select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.4);
+}
+/* buttons in step cards */
+
+/* Secondary action button (Start over) */
+.ppt-page .secondary-action {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background: transparent;
+  color: #e5e7eb;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.ppt-page .secondary-action:hover {
+  background: #1e293b;         /* softer dark hover */
+  border-color: #64748b;
+  transform: translateY(-2px);
+}
+
+/* Export PPTX button — Dark themed */
+.ppt-page .export-button {
+  padding: 8px 20px;
+  border-radius: 999px;
+  background: #1e293b;         /* dark navy */
+  border: 1px solid #334155;   /* subtle outline */
+  color: #e2e8f0;              /* soft text */
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.ppt-page .export-button:hover {
+  background: #0f172a;         /* deeper dark */
+  border-color: #475569;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.45);
+}
+
+/* =========================================================
+   REVIEW & EDIT SLIDES – MINI FEEDBACK CONTROLS
+   (only on PPT page; overrides slide-editor.css)
+   ======================================================= */
+
+.ppt-page .slide-card-footer {
+  margin-top: 0.4rem;
+}
+
+/* shrink whole feedback row */
+.ppt-page .slide-feedback-row {
+  padding: 2px 4px;
+  border-radius: 999px;
+  transform: scale(0.8);
+  transform-origin: left center;
+}
+
+/* smaller like / dislike buttons */
+.ppt-page .feedback-btn {
+  font-size: 0.55rem;
+  padding: 1px 4px;
+  min-width: 0;
+}
+
+/* tiny comment chip */
+.ppt-page .feedback-comment-input {
+  max-width: 110px;
+  font-size: 0.65rem;
+  padding: 0 0.3rem;
+}
+
+/* hide long status text, show only short word */
+.ppt-page .feedback-status {
+  font-size: 0.6rem;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* keep save button normal but slightly tighter */
+.ppt-page .slide-save-btn {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+}
+
+/* =========================================================
+   THEME PICKER (STEP 3)
+   ======================================================= */
+
+/* Grid of theme thumbnails */
+.ppt-page .theme-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+/* Theme thumbnail button – reset + card style */
+.ppt-page .theme-thumb {
+  /* reset button defaults */
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font: inherit;
+
+  /* card look */
+  position: relative;
+  border-radius: 14px;
+  padding: 4px;
+  background: #020617;
+  border: 1px solid #1f2937;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.85);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease,
+    background 0.18s ease;
+}
+
+.ppt-page .theme-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Label text under each thumbnail */
+.ppt-page .theme-thumb-label {
+  margin-top: 4px;
+  padding: 2px 4px 4px;
+  font-size: 0.78rem;      /* ✅ small and neat */
+  text-align: center;
+  color: #e5e7eb;
+}
+
+/* Hover + selected states */
+.ppt-page .theme-thumb:hover {
+  background: #020617;
+  border-color: #6366f1;
+  box-shadow: 0 16px 34px rgba(37, 99, 235, 0.55);
+  transform: translateY(-2px);
+}
+
+.ppt-page .theme-thumb.selected {
+  border-color: #6366f1;
+  box-shadow:
+    0 0 0 1px rgba(99, 102, 241, 0.7),
+    0 18px 40px rgba(37, 99, 235, 0.65);
+}
+
+/* Large preview card on the right */
+.ppt-page .theme-preview-large {
+  width: 220px;
+  max-width: 100%;
+  border-radius: 16px;
+  padding: 6px;
+  background: #020617;
+  border: 1px solid #1f2937;
+  box-shadow: 0 16px 38px rgba(15, 23, 42, 0.95);
+}
+
+.ppt-page .theme-preview-large img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+/* =========================================================
+   SLIDE FOOTER REWORK — COMMENT + SAVE BUTTON ROW
+   ======================================================= */
+
+.slides-list .slide-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Footer container pinned bottom */
+.slides-list .slide-card-footer {
+  margin-top: auto;              /* pushes footer to bottom */
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Small comment input */
+.slides-list .slide-comment-input {
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid #1f2937;
+  background: #020617;
+  padding: 0 10px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+}
+
+.slides-list .slide-comment-input::placeholder {
+  color: #6b7280;
+}
+
+.slides-list .slide-comment-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.6);
+}
+
+/* Save button (existing style override) */
+.slides-list .slide-save-btn {
+  padding: 7px 18px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+/* Temporary — inject comment input beside save button */
+.slide-card-footer {
+  position: relative;
+}
+
+.slide-card-footer::before {
+  content: "💬";
+  background: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 999px;
+  position: absolute;
+  left: 0;
+  height: 34px;
+  width: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #cbd5e1;
+  pointer-events: none;
+}
+
+/* --- Slides list: show 2 slides per row on wide screens, 1 on mobile --- */
+.slides-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 columns */
+  gap: 16px; /* horizontal & vertical gap between slide cards */
+  align-items: start;
+  margin-top: 12px;
+}
+
+/* wrapper for each SlideEditor so SlideEditor internals don't break grid */
+.slide-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ensure existing slide card uses full column width and is flexible */
+.slides-list .slide-card {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* allow slide body to grow and push footer to bottom for consistent layout */
+.slides-list .slide-card .slide-card-body {
+  flex: 1 1 auto;
+}
+
+/* OPTIONAL: cap slide preview height so a single very tall slide doesn't stretch whole row */
+.slides-list .slide-card .slide-card-body {
+  max-height: 520px; /* tune as needed */
+  overflow: auto;
+}
+
+/* Responsive: collapse to single column under 900px (phones/tablets) */
+@media (max-width: 900px) {
+  .slides-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === Theme picker: force 3 columns and up to 3 visible rows === */
+.ppt-page .theme-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 columns */
+  grid-auto-rows: auto;
+  gap: 12px;
+  max-height: calc((150px + 12px) * 3); /* approx 3 rows of thumbnail height + gaps */
+  overflow-y: auto; /* allow scrolling if you have >9 themes */
+  padding-right: 6px; /* give space for scrollbar */
+}
+
+/* Thumbnail card sizing — make consistent squares */
+.ppt-page .theme-thumb {
+  position: relative;
+  border-radius: 12px;
+  padding: 8px;
+  background: #020617;
+  border: 1px solid #1f2937;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.85);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  min-height: 150px; /* fixed height for consistent rows */
+  box-sizing: border-box;
+}
+
+/* Ensure thumbnail image keeps aspect and fits nicely */
+.ppt-page .theme-thumb img {
+  display: block;
+  width: 100%;
+  height: 100px; /* preview area */
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+/* label centered and small */
+.ppt-page .theme-thumb-label {
+  font-size: 0.78rem;
+  text-align: center;
+  color: #e5e7eb;
+  padding: 2px 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Selected state emphasis */
+.ppt-page .theme-thumb.selected {
+  border-color: #6366f1;
+  box-shadow:
+    0 0 0 4px rgba(99,102,241,0.06),
+    0 18px 40px rgba(37,99,235,0.42);
+  transform: translateY(-4px);
+}
+/* === Theme picker: fixed 3 columns × 4 visible rows, vertical scroll only === */
+.ppt-page .theme-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 columns */
+  grid-auto-rows: 180px;          /* fixed row height for consistent cards */
+  gap: 14px;                      /* space between cards */
+  max-height: calc((180px + 14px) * 4 - 14px); /* show 4 rows exactly (minus last gap) */
+  overflow-y: auto;               /* vertical scrolling when > 12 themes */
+  overflow-x: hidden;             /* prevent sideways scrolling */
+  padding-right: 8px;             /* room for vertical scrollbar */
+  box-sizing: border-box;
+  align-items: start;
+  justify-items: stretch;
+  grid-auto-flow: row;            /* ensure filling by rows */
+}
+
+/* Thumbnail card sizing — keep consistent box layout */
+.ppt-page .theme-thumb {
+  position: relative;
+  border-radius: 12px;
+  padding: 10px;
+  background: #020617;
+  border: 1px solid #1f2937;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.85);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  width: 100%;
+  height: 100%;          /* fill the fixed grid-auto-rows height */
+  box-sizing: border-box;
+  overflow: hidden;      /* ensure internal content doesn't overflow horizontally */
+}
+
+/* Thumbnail image: fixed preview area, preserve aspect and avoid sideways stretch */
+.ppt-page .theme-thumb img {
+  display: block;
+  width: 100%;
+  height: 116px;         /* consistent preview height */
+  object-fit: cover;     /* crop consistently instead of stretching */
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* label centered and small at bottom */
+.ppt-page .theme-thumb-label {
+  font-size: 0.78rem;
+  text-align: center;
+  color: #e5e7eb;
+  padding: 2px 6px;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+/* Selected state emphasis — visual lift */
+.ppt-page .theme-thumb.selected {
+  border-color: #6366f1;
+  box-shadow:
+    0 0 0 4px rgba(99,102,241,0.06),
+    0 18px 40px rgba(37,99,235,0.42);
+  transform: translateY(-4px);
+}
+
+/* Ensure container around theme picker doesn't cause horizontal overflow */
+.ppt-page .field-grid { 
+  overflow: hidden; 
+}
+
+/* Mobile: collapse to 2 columns under 900px, 1 column under 520px */
+@media (max-width: 900px) {
+  .ppt-page .theme-picker-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 160px;
+    max-height: none;
+  }
+}
+@media (max-width: 520px) {
+  .ppt-page .theme-picker-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+}

@@ -1,0 +1,22 @@
+.nav-root {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo { font-weight: 700; cursor: pointer; }
+.nav-center { display:flex; gap:8px; }
+.nav-btn { background: transparent; border: none; padding: 8px 12px; cursor: pointer; border-radius: 6px; }
+.nav-btn.active { background: #222; color: #fff; }
+.nav-right { display:flex; gap:8px; align-items:center; }
+.nav-cta { background:#222; color:#fff; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; }
+.nav-user { font-size:14px; color:#333; margin-right:6px; }

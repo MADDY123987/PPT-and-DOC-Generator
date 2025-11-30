@@ -1,0 +1,120 @@
+/* ========== GLOBAL (always DARK) ========== */
+
+/* Theme variables — used by component CSS */
+:root {
+  --bg: #071028;           /* page background deep */
+  --surface: #09121d;      /* slightly lighter surface */
+  --card: #020617;         /* cards & panels */
+  --muted: #9aa6c3;        /* subdued text */
+  --text: #e6eef8;         /* main text */
+  --accent: #6d7cff;       /* soft blue accent */
+  --accent-strong: #4f46e5;/* stronger purple-blue */
+  --glass: rgba(10, 15, 25, 0.6);
+  --border: #0f1724;
+  --shadow: 0 18px 40px rgba(2,6,23,0.75);
+  --glass-2: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  --radius: 12px;
+}
+
+/* page base */
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+}
+
+/* app container */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+/* main content area */
+.main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.page-container {
+  width: 100%;
+  max-width: 1400px;
+  padding: 20px 24px;
+  margin: 0 auto;
+}
+
+/* generic page cards */
+.card, .page, .page-narrow, .feature-card, .dashboard-page, .hero-demo-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--text);
+}
+
+/* headings & text */
+h1, h2, h3, h4, h5 {
+  color: var(--text);
+}
+
+p, label, span {
+  color: var(--muted);
+}
+
+/* buttons */
+button {
+  font-family: inherit;
+  border-radius: 999px;
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+
+.primary-pill, .dashboard-row-btn, .dashboard-new-btn {
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+  color: white;
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 8px 28px rgba(79,70,229,0.12);
+}
+
+.secondary-pill {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* inputs */
+input, textarea, select {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+/* small helpers */
+.hero-sub, .features-sub, .hero-small, .dashboard-subtitle {
+  color: var(--muted);
+}
+
+/* scrollbars (subtle) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #0f1724; border-radius: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* responsive container tweaks */
+@media (max-width: 1024px) {
+  .page-container { padding: 18px; }
+}
+
+.app-zoom {
+  zoom: 1.2; /* Adjust globally: 0.85, 0.95 etc */
+}

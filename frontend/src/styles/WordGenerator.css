@@ -1,0 +1,1152 @@
+/* =========================================================
+   AI Word Document Generator – Dark Studio Styling
+   Palette aligned with PPT page
+   ======================================================= */
+
+/* ---------- WORD PAGE LAYOUT ---------- */
+
+.word-page {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* header */
+
+.word-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+
+.word-page-header h2 {
+  margin: 0;
+}
+
+.page-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.word-badge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(129, 140, 248, 0.7);
+  background: radial-gradient(circle at top left, #1d2438, #020617 70%);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #e5e7eb;
+  box-shadow: 0 0 22px rgba(129, 140, 248, 0.5);
+}
+
+/* ---------- CARD BASE (SCOPED TO WORD PAGE) ---------- */
+
+.word-page .card {
+  position: relative;
+  background: radial-gradient(circle at top left, #020617, #020617 55%);
+  border-radius: 18px;
+  border: 1px solid #111827;
+  padding: 20px 22px 22px;
+  margin-bottom: 12px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.9);
+  overflow: hidden;
+}
+
+/* soft halo on hover */
+.word-page .card::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  background: radial-gradient(
+    circle at top left,
+    rgba(99, 102, 241, 0.25),
+    rgba(59, 130, 246, 0.16),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.word-page .card:hover::before {
+  opacity: 1;
+}
+
+.word-page .card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.word-page .card h3 {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.word-page .card-caption {
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* grid for title + pages row */
+.word-page .field-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 0.7fr;
+  gap: 12px 18px;
+}
+
+.word-page .card label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+}
+
+.word-page .card input[type="text"],
+.word-page .card input[type="number"],
+.word-page .card textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #4b5563;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.word-page .card input[type="text"]:focus,
+.word-page .card input[type="number"]:focus,
+.word-page .card textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.55);
+}
+
+.word-page .card input[type="number"] {
+  max-width: 140px;
+}
+
+.hint {
+  margin: 4px 0 12px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* ---------- MAGIC PROMPT BOX (HERO INSIDE CARD) ---------- */
+
+.prompt-label {
+  width: 100%;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+}
+
+.prompt-box {
+  position: relative;
+  width: 100%;
+  margin-top: 4px;
+  padding: 12px;
+  border-radius: 16px;
+  background: radial-gradient(circle at top left, #020617, #020617 60%);
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 18px 45px rgba(15, 23, 42, 0.95);
+  overflow: hidden;
+}
+
+/* animated glow similar to PPT prompt */
+.prompt-box::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 45deg,
+    rgba(99, 102, 241, 0.32),
+    rgba(59, 130, 246, 0.24),
+    rgba(45, 212, 191, 0.18),
+    transparent,
+    transparent
+  );
+  opacity: 0.25;
+  mix-blend-mode: screen;
+  animation: wordPromptGlow 14s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes wordPromptGlow {
+  0% {
+    transform: translate3d(-10%, -8%, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(10%, 10%, 0) rotate(180deg);
+  }
+  100% {
+    transform: translate3d(-10%, -8%, 0) rotate(360deg);
+  }
+}
+
+.prompt-header,
+.prompt-footer,
+.prompt-textarea {
+  position: relative;
+  z-index: 1;
+}
+
+.prompt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.prompt-pill {
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #eef2ff;
+}
+
+.prompt-hint {
+  font-size: 0.8rem;
+  color: #c7d2fe;
+}
+
+.prompt-textarea {
+  margin-top: 4px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: rgba(15, 23, 42, 0.96);
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  resize: vertical;
+  color: #e5e7eb;
+}
+
+.prompt-textarea::placeholder {
+  color: #6b7280;
+}
+
+.prompt-textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5);
+}
+
+.prompt-footer {
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.prompt-counter {
+  color: #9ca3af;
+}
+
+.prompt-idea-btn {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.78rem;
+  background: rgba(59, 130, 246, 0.16);
+  color: #bfdbfe;
+}
+
+.prompt-idea-btn:hover {
+  background: rgba(59, 130, 246, 0.28);
+}
+
+/* ---------- SECTIONS CONFIG (TOP FORM) ---------- */
+
+.sections-config {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #111827;
+}
+
+.sections-config h4 {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+}
+
+.section-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.section-row span {
+  width: 24px;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.section-row input {
+  flex: 1;
+}
+
+.ghost-pill {
+  margin-top: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.ghost-pill:hover {
+  background: #111827;
+}
+
+/* ---------- BUTTONS / STATES ---------- */
+
+.primary-action {
+  margin-top: 14px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #eef2ff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 16px 32px rgba(37, 99, 235, 0.45);
+}
+
+.primary-action:disabled {
+  opacity: 0.7;
+  cursor: default;
+  box-shadow: none;
+}
+
+.export-button {
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+  color: #022c22;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 16px 28px rgba(16, 185, 129, 0.45);
+}
+
+/* secondary button (Start over, etc.) */
+.word-page .secondary-action {
+  margin-top: 10px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.word-page .secondary-action:hover {
+  background: #111827;
+}
+
+.meta-line {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.error {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #fecaca;
+}
+
+/* =========================================================
+   WORD SECTION EDITOR – GRID + CARD STYLES
+   ======================================================= */
+
+/* Container grid for WordSectionEditor cards (3 per row on wide) */
+.word-sections-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+/* Single section card */
+.word-section-card {
+  background: #020617;
+  border-radius: 18px;
+  border: 1px solid #111827;
+  padding: 14px 16px;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.88);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.16s ease-out,
+    box-shadow 0.16s ease-out,
+    border-color 0.16s ease-out;
+}
+
+.word-section-card:hover {
+  transform: translateY(-3px);
+  border-color: #4f46e5;
+  box-shadow: 0 22px 44px rgba(15, 23, 42, 1);
+}
+
+/* Header row */
+.word-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.word-section-badge {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(55, 65, 81, 0.85);
+  color: #e5e7eb;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.word-section-title {
+  font-size: 0.9rem;
+  color: #c7d2fe;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Preview box (section content) */
+.word-section-preview {
+  margin-top: 0.4rem;
+  padding: 0.8rem 0.95rem;
+  border-radius: 14px;
+  background: radial-gradient(circle at top left, #020617 0%, #020617 65%);
+  border: 1px solid rgba(15, 23, 42, 0.95);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 140px;
+}
+
+.wsp-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  border-bottom: 1px solid #111827;
+  padding-bottom: 4px;
+}
+
+.wsp-body {
+  font-size: 0.84rem;
+  color: #d1d5db;
+  line-height: 1.45;
+}
+
+/* Editable textarea version (if you're using a <textarea/>) */
+.wsp-body-editable {
+  width: 100%;
+  min-height: 140px;
+  padding: 0.7rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid rgba(71, 85, 105, 0.9);
+  background: rgba(15, 23, 42, 0.98);
+  color: #e5e7eb;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* make it feel lighter, not like a huge scroll box */
+.wsp-body-editable::placeholder {
+  color: #6b7280;
+}
+
+.wsp-body-editable:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.45);
+}
+
+/* Remove ugly resize corner on some browsers */
+.wsp-body-editable {
+  scrollbar-width: thin;
+}
+
+/* if you are using a contentEditable div/input instead */
+.wsp-body-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--word-body-color, #e5e7eb);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-family: inherit;
+  outline: none;
+}
+
+.wsp-body-input:focus {
+  outline: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 8px;
+  background: rgba(15, 23, 42, 0.9);
+}
+
+/* ---------- Word section feedback (like / dislike / comment) ---------- */
+
+.word-feedback-row {
+  margin-top: 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 11px;
+  background: radial-gradient(
+      circle at top left,
+      rgba(250, 204, 21, 0.12),
+      transparent 55%
+    ),
+    rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(148, 163, 184, 0.55); /* softer border */
+}
+
+.word-feedback-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.word-feedback-btn {
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: 0.78rem;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(250, 204, 21, 0.5);
+  color: #fefce8;
+  cursor: pointer;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: background 0.15s ease, border-color 0.15s ease,
+    box-shadow 0.15s ease, transform 0.06s ease;
+}
+
+.word-feedback-btn:hover {
+  background: rgba(24, 33, 59, 0.99);
+  box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.35);
+}
+
+.word-feedback-btn.active {
+  border-color: #facc15;
+  background: radial-gradient(circle at top, #facc15, #f97316);
+  color: #111827;
+  font-weight: 600;
+  box-shadow: 0 0 0 1px rgba(250, 250, 250, 0.2);
+  transform: translateY(-1px);
+}
+
+.word-feedback-status {
+  font-size: 0.75rem;
+  color: #e5e7eb;
+}
+
+/* comment box — compact, not a huge scroll area */
+.word-feedback-comment {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.4rem 0.55rem;
+  border-radius: 0.55rem;
+  border: 1px solid rgba(156, 163, 175, 0.7);
+  background: rgba(15, 23, 42, 0.97);
+  resize: vertical;
+  font-size: 0.8rem;
+  font-family: inherit;
+  color: #f9fafb;
+}
+
+.word-feedback-comment::placeholder {
+  color: #9ca3af;
+}
+
+.word-feedback-comment:focus {
+  outline: none;
+  border-color: #facc15;
+  box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.4);
+}
+
+/* footer layout */
+
+.word-section-footer {
+  margin-top: 0.55rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.word-save-status {
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+
+.word-section-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.word-save-btn,
+.word-refine-btn {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* primary save button */
+.word-save-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #ecfdf5;
+}
+
+/* refine button */
+.word-refine-btn {
+  background: linear-gradient(135deg, #6366f1, #3b82f6);
+  color: #eef2ff;
+}
+
+.word-save-btn:hover,
+.word-refine-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.6);
+}
+
+/* ---------- RESPONSIVE CORE ---------- */
+
+@media (max-width: 900px) {
+  .word-page .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .word-page .card input[type="number"] {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .word-page {
+    padding: 0 12px;
+  }
+
+  .word-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .word-page .card {
+    padding: 16px 14px 18px;
+  }
+
+  .prompt-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .prompt-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .word-section-preview {
+    min-height: 130px;
+  }
+}
+
+/* =========================================================
+   Marketing / Feature Sections under Word Generator (DARK)
+   ======================================================= */
+
+.word-marketing {
+  margin-top: 4px;
+  background: radial-gradient(circle at top left, #020617, #020617 65%);
+  border-radius: 20px;
+  padding: 24px 22px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;           /* was 26px */
+  border: 1px solid #111827;
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.95);
+}
+
+
+/* feature rows (image + text) */
+
+.word-feature-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 2fr);
+  gap: 22px;
+  align-items: center;
+}
+
+.word-feature-row--reverse {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.6fr);
+}
+
+.word-feature-row--reverse .word-feature-media {
+  order: 2;
+}
+
+.word-feature-row--reverse .word-feature-copy {
+  order: 1;
+}
+
+.word-feature-media {
+  display: flex;
+  justify-content: center;
+}
+
+.word-feature-media-card {
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 4 / 3;
+  border-radius: 24px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: radial-gradient(circle at top left, #4f46e5, #3b82f6, #f97316);
+  color: #f9fafb;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.8);
+  font-size: 0.9rem;
+}
+
+.word-feature-media-card--warm {
+  background: radial-gradient(circle at top left, #fb923c, #f97316, #facc15);
+}
+
+.word-feature-media-card--soft {
+  background: radial-gradient(circle at top left, #312e81, #6366f1, #ecfeff);
+  color: #0f172a;
+}
+
+.word-feature-icon {
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+}
+
+.word-feature-copy h3 {
+  margin: 0 0 6px;
+  font-size: 1.15rem;
+  color: #e5e7eb;
+}
+
+.word-feature-copy p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.word-feature-list {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 0.86rem;
+  color: #9ca3af;
+}
+
+/* use cases */
+
+.word-usecases {
+  margin-top: 24px;
+  padding: 22px 22px 14px;
+  border-radius: 20px;
+  background: radial-gradient(circle at top left, #020617, #020617 70%);
+  border: 1px solid #111827;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.95);
+}
+
+.word-usecases h3 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+  color: #e5e7eb;
+}
+
+.word-usecases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.usecase-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.88rem;
+  padding: 10px 10px 12px;
+  border-radius: 14px;
+  background: #020617;
+  border: 1px solid #1f2937;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.8);
+}
+
+.usecase-icon {
+  font-size: 1.3rem;
+}
+
+.usecase-item h4 {
+  margin: 2px 0 2px;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+}
+
+.usecase-item p {
+  margin: 0;
+  color: #9ca3af;
+}
+
+/* FAQs */
+
+.word-faq {
+  margin-top: 24px;
+  padding: 22px 22px 26px;
+  border-radius: 20px;
+  background: radial-gradient(circle at top left, #020617, #020617 70%);
+  border: 1px solid #111827;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.95);
+}
+
+.word-faq h3 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+  color: #e5e7eb;
+}
+
+.word-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 26px;
+}
+
+.faq-item h4 {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+}
+
+.faq-item p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #9ca3af;
+}
+
+/* responsive tweaks for marketing */
+
+@media (max-width: 960px) {
+  .word-feature-row,
+  .word-feature-row--reverse {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .word-feature-row--reverse .word-feature-media,
+  .word-feature-row--reverse .word-feature-copy {
+    order: initial;
+  }
+
+  .word-usecases-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .word-marketing,
+  .word-usecases,
+  .word-faq {
+    padding: 18px 16px 20px;
+  }
+
+  .word-usecases-grid,
+  .word-faq-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* Editable section body textarea */
+.wsp-body-input {
+  width: 100%;
+  min-height: 150px;
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(71, 85, 105, 0.9);
+  background: rgba(15, 23, 42, 0.98); /* dark, no white box */
+  color: #e5e7eb;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  font-family: inherit;
+  resize: vertical;          /* you can drag to grow if needed */
+  outline: none;
+}
+
+/* placeholder text */
+.wsp-body-input::placeholder {
+  color: #6b7280;
+}
+
+/* focus state */
+.wsp-body-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.45);
+}
+
+/* --- Nice dark scrollbar --- */
+.wsp-body-input::-webkit-scrollbar {
+  width: 6px;
+}
+
+.wsp-body-input::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 999px;
+}
+
+.wsp-body-input::-webkit-scrollbar-thumb {
+  background: #6366f1;          /* indigo thumb */
+  border-radius: 999px;
+}
+
+.wsp-body-input::-webkit-scrollbar-thumb:hover {
+  background: #4f46e5;
+}
+
+/* Firefox scrollbar */
+.wsp-body-input {
+  scrollbar-width: thin;
+  scrollbar-color: #6366f1 rgba(15, 23, 42, 0.7);
+}
+.word-section-card {
+  border-radius: 12px;
+  background: #0b1220;
+  border: 1px solid #111827;
+  padding: 14px;
+  margin-bottom: 12px;
+  color: #e6eef8;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.word-section-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.word-section-badge {
+  font-size:0.78rem;
+  color:#c7d2fe;
+  background: rgba(99,102,241,0.08);
+  padding:4px 8px;
+  border-radius:999px;
+  margin-right:8px;
+}
+.word-section-title {
+  margin:0;
+  font-size:1rem;
+  color:#eef2ff;
+}
+
+.word-section-preview .wsp-title {
+  font-weight:600;
+  color:#cbd5f5;
+  margin-bottom:6px;
+}
+
+.wsp-body-input {
+  width:100%;
+  min-height:110px;
+  border-radius:10px;
+  background:#020617;
+  border:1px solid #1f2937;
+  padding:10px 12px;
+  color:#e6eef8;
+  font-size:0.95rem;
+  resize:vertical;
+}
+
+.wsp-footer-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-top:6px;
+}
+
+.wsp-charcount {
+  font-size:0.82rem;
+  color:#9ca3af;
+}
+
+.wsp-actions { display:flex; gap:8px; align-items:center; }
+
+.word-refine-btn, .word-revert-btn {
+  border-radius:10px;
+  padding:8px 10px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.word-refine-btn {
+  background: linear-gradient(90deg,#6d28d9,#3b82f6);
+  color:#fff;
+}
+.word-refine-btn[disabled] {
+  opacity:0.55;
+  cursor:not-allowed;
+}
+
+.word-revert-btn {
+  background:transparent;
+  color:#cbd5f5;
+  border:1px solid rgba(99,102,241,0.12);
+}
+
+.word-feedback-row {
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+}
+
+.word-feedback-buttons { display:flex; gap:8px; align-items:center; }
+.word-feedback-btn {
+  padding:6px 10px;
+  border-radius:999px;
+  background:transparent;
+  border:1px solid #1f2937;
+  color:#e6eef8;
+  cursor:pointer;
+}
+.word-feedback-btn.active {
+  background:#0b1220;
+  border-color:#6366f1;
+  box-shadow:0 6px 18px rgba(99,102,241,0.12);
+  color:#e6eef8;
+}
+
+.word-feedback-comment {
+  flex:1;
+  border-radius:10px;
+  border:1px solid #1f2937;
+  background:#020617;
+  padding:8px 10px;
+  color:#e6eef8;
+  font-size:0.88rem;
+}
+
+.word-error {
+  color:#fecaca;
+  font-size:0. nine rem;
+  margin-top:6px;
+}
+
+/* Make prompt box full width */
+.prompt-box {
+  width: 100% !important;
+}
+
+/* Make the textarea full width too */
+.prompt-textarea {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* ===========================
+   Patch: Make Topic Prompt full-width + tidy section-count
+   Append to bottom of WordGenerator.css
+   =========================== */
+
+/* ensure the prompt hero always uses full card width */
+.prompt-box {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* textarea inside prompt becomes full width and stretches */
+.prompt-textarea {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  min-height: 110px;               /* a bit taller for comfort */
+  resize: vertical;
+}
+
+/* tighten the title + section-count layout so the title input keeps plenty of room */
+.word-page .field-grid {
+  grid-template-columns: 1fr 220px; /* title gets large area, controls fit to right */
+  gap: 12px;
+}
+
+/* compact number input + +/- buttons next to title */
+.field-grid .ghost-pill,
+.field-grid input[type="number"] {
+  height: 40px;
+  align-self: center;
+  font-size: 0.95rem;
+}
+
+/* number input styling (center text so it looks neat) */
+.field-grid input[type="number"] {
+  width: 84px !important;
+  text-align: center;
+  padding: 8px 6px;
+  border-radius: 10px;
+  border: 1px solid #4b5563;
+  background: #020617;
+  color: #e5e7eb;
+}
+
+/* small +/- button tweaks */
+.field-grid .ghost-pill {
+  padding: 8px 10px;
+  border-radius: 10px;
+  min-width: 36px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* mobile: fallback so textarea still fits on small screens */
+@media (max-width: 900px) {
+  .word-page .field-grid {
+    grid-template-columns: 1fr;
+  }
+  .field-grid .ghost-pill,
+  .field-grid input[type="number"] {
+    width: auto;
+  }
+}

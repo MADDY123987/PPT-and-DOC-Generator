@@ -1,0 +1,291 @@
+/* =========================================================
+   Slide editor styles (slides list, slide card, footer, comment input)
+   File: src/components/ppt/slide-editor.css
+   ========================================================= */
+
+/* slides list container */
+.slides-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* slide editor card (per-slide) */
+.slide-editor-card {
+  background: #020617;
+  border: 1px solid #111827;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15,23,42,0.8);
+  color: #e5e7eb;
+}
+
+/* unify slide-card for legacy selectors */
+.slides-list .slide-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Footer container pinned bottom */
+.slides-list .slide-card-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Small comment input */
+.slides-list .slide-comment-input {
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid #1f2937;
+  background: #020617;
+  padding: 0 10px;
+  font-size: 0.78rem;
+  color: #e5e7eb;
+}
+
+.slides-list .slide-comment-input::placeholder {
+  color: #6b7280;
+}
+
+.slides-list .slide-comment-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.6);
+}
+
+/* Save button variant */
+.slides-list .slide-save-btn {
+  padding: 7px 18px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* tiny feedback row overrides for PPT page */
+.ppt-page .slide-card-footer { margin-top: 0.4rem; }
+.ppt-page .slide-feedback-row { padding: 2px 4px; border-radius:999px; transform: scale(0.8); transform-origin:left center; }
+.ppt-page .feedback-btn { font-size:0.55rem; padding:1px 4px; min-width:0; }
+.ppt-page .feedback-comment-input { max-width:110px; font-size:0.65rem; padding:0 0.3rem; }
+.ppt-page .feedback-status { font-size:0.6rem; max-width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* Slide-list layout specifics (grid-like rows) */
+.slide-editor-row {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 12px;
+  align-items: start;
+}
+
+/* mini preview area for image slides */
+.slide-preview {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #111827;
+  min-height: 90px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+}
+
+/* small icon / meta */
+.slide-meta {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* Save + revert row in editor */
+.slide-editor-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* Revert button style */
+.slide-editor-revert {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid #374151;
+  color: #e5e7eb;
+  cursor: pointer;
+}
+
+/* Save button style */
+.slide-editor-save {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #4f46e5;
+  border: 1px solid #4f46e5;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* tiny helper text */
+.slide-helper {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* fallback styling to ensure image previews don't overflow */
+.slide-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* temporary decorative comment chip beside footer (keeps old behavior) */
+.slide-card-footer {
+  position: relative;
+}
+.slide-card-footer::before {
+  content: "💬";
+  background: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 999px;
+  position: absolute;
+  left: 0;
+  height: 34px;
+  width: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #cbd5e1;
+  pointer-events: none;
+}
+
+/* RESPONSIVE: collapse to column on small screens */
+@media (max-width: 768px) {
+  .slide-editor-row { grid-template-columns: 1fr; }
+  .slides-list { gap: 10px; }
+}
+/* slide-editor.css — fixes for editable inputs */
+.slide-editor-card {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: text;  /* allow selection */
+  user-select: text;
+}
+
+/* Input / textarea baseline (applies only inside slide-editor) */
+.slide-editor-card input,
+.slide-editor-card textarea {
+  box-sizing: border-box;
+  -webkit-user-modify: read-write-plaintext-only; /* mobile/contenteditable fix */
+  user-modify: read-write;
+  user-select: text;
+  caret-color: #eef2ff; /* visible caret */
+  color: #e5e7eb;
+  background: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  resize: vertical;
+  outline: none;
+  /* Allow multiple spaces/newlines to be visible */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Safeguard: ensure pointer events are enabled */
+.slide-editor-card input,
+.slide-editor-card textarea {
+  pointer-events: auto;
+}
+
+/* In case global rules set ::selection invisible */
+.slide-editor-card input::selection,
+.slide-editor-card textarea::selection {
+  background: rgba(99,102,241,0.25);
+  color: #fff;
+}
+
+/* Ensure container doesn’t clip caret */
+.slide-editor-card {
+  overflow: visible;
+}
+
+/* Make the textarea visually obvious when focused */
+.slide-editor-card input:focus,
+.slide-editor-card textarea:focus {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.12), 0 0 0 1px rgba(99, 102, 241, 0.45);
+  border-color: #6366f1;
+}
+
+/* Prevent any accidental global rule from disabling editing inside this card */
+.slide-editor-card * {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Optional: improve touch interactions on mobile */
+.slide-editor-card textarea {
+  -webkit-text-size-adjust: 100%;
+  -webkit-touch-callout: default;
+  -webkit-tap-highlight-color: rgba(255,255,255,0.06);
+}
+
+/* slide-editor.css (append or create) */
+
+/* container */
+.slide-editor-card {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: text;           /* allow selection inside editor */
+  -webkit-user-select: text;
+  overflow: visible;
+}
+
+/* base styles for input & textarea inside slide editor */
+.slide-editor-card input,
+.slide-editor-card textarea {
+  box-sizing: border-box;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  pointer-events: auto !important;
+  caret-color: #eef2ff !important;    /* ensure caret visible */
+  color: #e5e7eb !important;
+  background: #020617 !important;
+  border: 1px solid #1f2937 !important;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  white-space: pre-wrap !important;    /* preserve spaces & newlines */
+  word-wrap: break-word;
+  resize: vertical;
+  outline: none;
+}
+
+/* selection */
+.slide-editor-card input::selection,
+.slide-editor-card textarea::selection {
+  background: rgba(99,102,241,0.25);
+  color: #ffffff;
+}
+
+/* focus ring */
+.slide-editor-card input:focus,
+.slide-editor-card textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.12), 0 0 0 1px rgba(99,102,241,0.45);
+}
+
+/* mobile / accessibility */
+.slide-editor-card textarea {
+  -webkit-text-size-adjust: 100%;
+  -webkit-touch-callout: default;
+  -webkit-tap-highlight-color: rgba(255,255,255,0.04);
+}
