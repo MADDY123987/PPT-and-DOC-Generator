@@ -4,8 +4,8 @@
 
 // AUTH BASE URL (for login/register endpoints that are not versioned)
 //export const AUTH_BASE_URL = "https://ai-doc-backend-hecs.onrender.com";
-//export const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1`;
-//export const AUTH_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+export const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1`;
+export const AUTH_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 
 export const PPT_THEMES = {
