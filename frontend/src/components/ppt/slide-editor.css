@@ -329,3 +329,65 @@
   color: #e5e7eb;
   margin: 0;
 }
+/* Feedback row small controls */
+.slide-feedback-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.feedback-buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.feedback-btn {
+  border-radius: 999px;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+  border: 1px solid rgba(148,163,184,0.12);
+  background: rgba(15,23,42,0.65);
+  color: #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
+}
+
+.feedback-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(30,64,175,0.85);
+}
+
+.feedback-btn.active {
+  background: linear-gradient(135deg, #6366f1, #3b82f6);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 20px rgba(59,130,246,0.18);
+}
+
+.feedback-comment-input {
+  max-width: 100%;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.06);
+  background: rgba(2,6,23,0.6);
+  color: #e5e7eb;
+  padding: 0 10px;
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.feedback-comment-input::placeholder {
+  color: #6b7280;
+}
+
+.feedback-comment-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.08);
+}
+

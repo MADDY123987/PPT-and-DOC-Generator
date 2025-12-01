@@ -12,9 +12,15 @@ export default function SlideEditor({
   const [title, setTitle] = useState(slide.title || "");
   const [bulletsText, setBulletsText] = useState((slide.bullets || []).join("\n"));
 
+  // Feedback states (new)
+  const [feedback, setFeedback] = useState(slide.feedback || null); // "like" | "dislike" | null
+  const [feedbackComment, setFeedbackComment] = useState((slide.feedback_comment || ""));
+
   useEffect(() => {
     setTitle(slide.title || "");
     setBulletsText((slide.bullets || []).join("\n"));
+    setFeedback(slide.feedback || null);
+    setFeedbackComment(slide.feedback_comment || "");
   }, [slide]);
 
   const handleLocal = (patch) => onLocalChange(index, patch);
@@ -36,6 +42,19 @@ export default function SlideEditor({
     }
   };
 
+  // New: toggle like/dislike and call onLocalChange so parent knows
+  const handleFeedback = (type) => {
+    const newFeedback = feedback === type ? null : type;
+    setFeedback(newFeedback);
+    handleLocal({ feedback: newFeedback });
+  };
+
+  const handleCommentChange = (e) => {
+    const txt = e.target.value;
+    setFeedbackComment(txt);
+    handleLocal({ feedback_comment: txt });
+  };
+
   const handleSave = () => {
     const payload = {
       ...slide,
@@ -44,6 +63,9 @@ export default function SlideEditor({
         .split("\n")
         .map((s) => s.trim())
         .filter(Boolean),
+      // include feedback fields on save too
+      feedback,
+      feedback_comment: (feedbackComment || "").trim() || undefined,
     };
     onSave(index, payload);
   };
@@ -51,6 +73,8 @@ export default function SlideEditor({
   const handleRevert = () => {
     setTitle(slide.title || "");
     setBulletsText((slide.bullets || []).join("\n"));
+    setFeedback(slide.feedback || null);
+    setFeedbackComment(slide.feedback_comment || "");
     onLocalChange(index, slide);
   };
 
@@ -93,6 +117,48 @@ export default function SlideEditor({
             boxSizing: "border-box", whiteSpace: "pre-wrap", lineHeight: 1.45, resize: "vertical"
           }}
         />
+      </div>
+
+      {/* NEW: feedback row (like/dislike + comment) */}
+      <div style={{ marginTop: 10 }}>
+        <div className="slide-feedback-row" style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <div className="feedback-buttons" role="group" aria-label={`Feedback for slide ${index + 1}`}>
+            <button
+              type="button"
+              className={`feedback-btn ${feedback === "like" ? "active" : ""}`}
+              title="Like"
+              onClick={() => handleFeedback("like")}
+            >
+              👍
+            </button>
+            <button
+              type="button"
+              className={`feedback-btn ${feedback === "dislike" ? "active" : ""}`}
+              title="Dislike"
+              onClick={() => handleFeedback("dislike")}
+            >
+              👎
+            </button>
+          </div>
+
+          <input
+            className="feedback-comment-input"
+            placeholder="Add quick comment"
+            value={feedbackComment}
+            onChange={handleCommentChange}
+            style={{
+              marginLeft: 6,
+              width: "100%",
+              height: 36,
+              borderRadius: 999,
+              border: "1px solid #1f2937",
+              background: "#020617",
+              color: "#e5e7eb",
+              padding: "0 10px",
+              fontSize: 12,
+            }}
+          />
+        </div>
       </div>
 
       <div style={{ marginTop: 10, display: "flex", gap: 8 }}>
