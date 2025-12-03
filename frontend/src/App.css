@@ -116,5 +116,5 @@ input, textarea, select {
 }
 
 .app-zoom {
-  zoom: 1.1; /* Adjust globally: 0.85, 0.95 etc */
+  zoom: 1.0; /* Adjust globally: 0.85, 0.95 etc */
 }
