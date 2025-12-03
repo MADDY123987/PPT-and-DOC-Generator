@@ -237,7 +237,7 @@ function WordGenerator() {
                 rows={4}
                 value={docTopic}
                 onChange={(e) => setDocTopic(e.target.value)}
-                placeholder="Ex: Create a 2-page report on how generative AI can help college students prepare presentations faster..."
+                placeholder="Ex: Create a detailed document on “Wonders of Nature,” explaining its beauty, importance, key elements, human impact, and ways to protect the environment."
               />
 
               <div className="prompt-footer">
@@ -249,7 +249,7 @@ function WordGenerator() {
                   className="prompt-idea-btn"
                   onClick={() =>
                     setDocTopic(
-                      "Write a concise overview of our startup's AI-powered presentation tool, including target audience, key features, benefits for students and businesses, and future roadmap."
+                      "Create a detailed and well-structured document on the topic “Wonders of Nature.” Explain in depth the beauty, importance, and interconnected balance of natural elements that make our planet vibrant and alive. Discuss what nature truly represents and explore major components such as forests, oceans, mountains, rivers, air, and the life forms that depend on them. Describe how forests support biodiversity, how oceans regulate climate and host countless species, how wildlife forms the foundation of ecological stability, and how natural cycles like seasons and climate patterns shape the world around us. Include real-world examples, simple explanations, and thoughtful insights on how human activities such as pollution, deforestation, and overuse of resources are disrupting this balance. Also highlight meaningful and practical ways people can protect and preserve nature through conservation, responsible habits, and sustainable practices. The tone should be informative, engaging, and easy to understand, helping the reader appreciate the wonders of nature while understanding the urgent need to safeguard the environment for the future."
                     )
                   }
                   disabled={loading || mode === "generating"}
