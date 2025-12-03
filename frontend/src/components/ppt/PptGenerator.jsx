@@ -238,7 +238,7 @@ function PptGenerator() {
               rows={6}
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              placeholder='Ex: Create slides on "How AI helps students build better presentations", including intro, benefits, workflow, risks and conclusion.'
+              placeholder='Ex: Create a PPT and DOC on “Wonders of Nature,” explaining its beauty, importance, key elements, human impact, and ways to protect the environment.'
               aria-label="Slide prompt"
             />
 
@@ -265,7 +265,7 @@ function PptGenerator() {
                   className="ppt-hero-idea-btn"
                   onClick={() =>
                     setTopic(
-                      "Create a 6-slide deck pitching our AI-powered PPT + DOC generator for university students, covering problem, solution, key features, tech stack, demo flow, and next steps."
+                      "Create a presentation and a detailed document on the topic “Wonders of Nature.” Explain the beauty, importance, and key elements of nature with clear subtopics, and include visuals or examples wherever possible. The presentation should have a minimum of ten slides and cover areas such as the meaning and importance of nature, major elements like land, water, and air, forests and their biodiversity, oceans and marine life, wildlife and endangered species, climate and natural cycles, human impact on the environment, and simple ways humans can protect and restore nature. The detailed document should also contain at least ten well-structured sections expanding on these ideas, highlighting the balance of our planet and the need for sustainable practices, ending with a clear and inspiring conclusion."
                     )
                   }
                   disabled={loading || mode === "generating"}
